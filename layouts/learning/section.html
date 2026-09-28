@@ -3,56 +3,40 @@
 {{- end -}}
 
 {{- define "content" -}}
-  {{- $topics := .Site.Params.learning.topics | default (slice "编程" "英语" "数学" "通识") -}}
-  {{- $pages := .Pages -}}
+  {{- $subsections := where .Pages "Kind" "section" -}}
+  {{- $pages := where .Pages "Kind" "page" -}}
   <div class="page archive learning">
     <div class="header">
       <h1 class="single-title animate__animated animate__pulse animate__faster">
         {{- dict "Class" "fa-solid fa-graduation-cap fa-fw me-1" | partial "plugin/icon.html" -}}
-        {{- .Params.Title | default "Learning" }} <sup>{{ $pages.Len }}</sup>
+        {{- .Params.Title | default "Learning" }}
       </h1>
       {{- with .Content -}}
         <div class="single-subtitle total-word-count">{{ . }}</div>
       {{- end -}}
     </div>
 
-    {{- range $topic := $topics -}}
-      {{- $group := where $pages "Params.categories" "intersect" (slice $topic) -}}
-      {{- if $group -}}
-        <h2 class="group-title">
+    {{- range $subsections.ByTitle -}}
+      <article class="archive-item">
+        <a href="{{ .RelPermalink }}" class="archive-item-link">
           {{- dict "Class" "fa-solid fa-folder-open fa-fw me-1" | partial "plugin/icon.html" -}}
-          {{ $topic }} <sup>{{ len $group }}</sup>
-        </h2>
-        {{- range $group.ByDate.Reverse -}}
-          <article class="archive-item">
-            <a href="{{ .RelPermalink }}" class="archive-item-link">{{ .LinkTitle }}</a>
-            <span class="archive-item-date" title='{{ "2006-01-02 15:04:05" | .Date.Format }}'>
-              {{- .Date | dateFormat ($.Site.Params.section.dateFormat | default "01-02") -}}
-            </span>
-          </article>
-        {{- end -}}
-      {{- end -}}
+          {{ .LinkTitle }}
+        </a>
+        <span class="archive-item-date">{{ .RegularPagesRecursive.Len }} 篇</span>
+      </article>
     {{- end -}}
 
-    {{- /* 未归入上面任何主题的笔记 */ -}}
-    {{- $grouped := slice -}}
-    {{- range $topic := $topics -}}
-      {{- $grouped = $grouped | append (where $pages "Params.categories" "intersect" (slice $topic)) -}}
+    {{- range $pages.ByDate.Reverse -}}
+      <article class="archive-item">
+        <a href="{{ .RelPermalink }}" class="archive-item-link">{{ .LinkTitle }}</a>
+        <span class="archive-item-date" title='{{ "2006-01-02 15:04:05" | .Date.Format }}'>
+          {{- .Date | dateFormat ($.Site.Params.section.dateFormat | default "01-02") -}}
+        </span>
+      </article>
     {{- end -}}
-    {{- $rest := complement $grouped $pages -}}
-    {{- if $rest -}}
-      <h2 class="group-title">
-        {{- dict "Class" "fa-solid fa-folder-open fa-fw me-1" | partial "plugin/icon.html" -}}
-        其他 <sup>{{ len $rest }}</sup>
-      </h2>
-      {{- range $rest.ByDate.Reverse -}}
-        <article class="archive-item">
-          <a href="{{ .RelPermalink }}" class="archive-item-link">{{ .LinkTitle }}</a>
-          <span class="archive-item-date" title='{{ "2006-01-02 15:04:05" | .Date.Format }}'>
-            {{- .Date | dateFormat ($.Site.Params.section.dateFormat | default "01-02") -}}
-          </span>
-        </article>
-      {{- end -}}
+
+    {{- if and (not $subsections) (not $pages) -}}
+      <p>这个分类下还没有内容。</p>
     {{- end -}}
   </div>
 {{- end -}}

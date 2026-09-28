@@ -2,8 +2,6 @@
 title: Python 里 list 可变、tuple 不可变，为什么？
 date: 2026-09-28
 lastmod: 2026-09-28
-categories:
-  - 编程
 tags:
   - Python
   - 数据结构
