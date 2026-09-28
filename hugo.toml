@@ -54,13 +54,23 @@ theme = "FixIt"
       # FixIt 0.2.16 | NEW set menu item type, optional values: ["mobile", "desktop"]
       type = ""
   [[menu.main]]
+    identifier = "learning"
+    pre = ""
+    post = ""
+    name = "Learning"
+    url = "/learning/"
+    title = ""
+    weight = 2
+    [menu.main.params]
+      icon = "fa-solid fa-graduation-cap"
+  [[menu.main]]
     identifier = "categories"
     pre = ""
     post = ""
     name = "Categories"
     url = "/categories/"
     title = ""
-    weight = 2
+    weight = 3
     [menu.main.params]
       icon = "fa-solid fa-th"
   [[menu.main]]
@@ -70,7 +80,7 @@ theme = "FixIt"
     name = "Tags"
     url = "/tags/"
     title = ""
-    weight = 3
+    weight = 4
     [menu.main.params]
       icon = "fa-solid fa-tags"
   [[menu.main]]
@@ -80,7 +90,7 @@ theme = "FixIt"
     name = "About"
     url = "/about/"
     title = ""
-    weight = 4
+    weight = 5
     [menu.main.params]
       icon = "fa-solid fa-info-circle"
 
@@ -871,6 +881,13 @@ theme = "FixIt"
       enable = false
       # "vConsole", "eruda" supported
       type = "vConsole"
+
+# -------------------------------------------------------------------------------------
+# Learning config
+# 每篇复习笔记用 categories 指定所属主题，这里列出 Learning 页面按主题分组的顺序。
+# -------------------------------------------------------------------------------------
+[params.learning]
+  topics = ["编程", "英语", "数学", "通识"]
 
 # -------------------------------------------------------------------------------------
 # Modules Configuration
